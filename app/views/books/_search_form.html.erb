@@ -1,0 +1,18 @@
+
+<%= form_with url: search_books_path, method: :get, class: "#{local_assigns[:custom_class]}" do |f| %>
+  <div class="input-group">
+    <%= f.text_field :q, value: local_assigns[:query], class: "form-control", placeholder: "Buscar por título, autor ou ISBN..." %>
+    
+    <%= f.select :type, 
+        options_for_select([
+          ['Título', 'title'], 
+          ['Autor', 'author'], 
+          ['ISBN', 'isbn']
+        ], local_assigns[:type]), 
+        {}, 
+        { class: "form-select", style: "max-width: 120px;" } 
+    %>
+    
+    <%= f.submit "Buscar", class: "btn btn-primary" %>
+  </div>
+<% end %>

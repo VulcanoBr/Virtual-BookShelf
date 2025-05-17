@@ -1,0 +1,50 @@
+
+<div class="card h-100 shadow-sm">
+  <div class="position-relative" style="height: 180px;">
+    <% if book.thumbnail_url.present? %>
+      <img src="<%= book.thumbnail_url %>" alt="<%= book.title %>" class="card-img-top h-100 object-fit-cover">
+    <% else %>
+      <div class="h-100 d-flex align-items-center justify-content-center bg-light">
+        <i class="bi bi-book fs-1 text-secondary"></i>
+      </div>
+    <% end %>
+  </div>
+  
+  <div class="card-body">
+    <h5 class="card-title text-truncate" title="<%= book.title %>"><%= book.title %></h5>
+    
+    <% if book.authors.present? %>
+      <p class="card-text text-truncate"><small class="text-muted">por <%= book.authors %></small></p>
+    <% end %>
+    
+    <% if defined?(show_status) && show_status && book.respond_to?(:status) && book.status.present? %>
+      <div class="mb-2">
+        <% status_badge_class = case book.status
+                               when 'want_to_read' then 'bg-info'
+                               when 'reading' then 'bg-warning'
+                               when 'read' then 'bg-success'
+                               else 'bg-secondary'
+                               end %>
+        
+        <% status_text = case book.status
+                        when 'want_to_read' then 'Quero ler'
+                        when 'reading' then 'Estou lendo'
+                        when 'read' then 'Já li'
+                        else book.status.humanize
+                        end %>
+        
+        <span class="badge <%= status_badge_class %>"><%= status_text %></span>
+      </div>
+    <% end %>
+    
+    <% if defined?(show_description) && show_description && book.description.present? %>
+      <p class="card-text">
+        <%= truncate(book.description, length: 100) %>
+      </p>
+    <% end %>
+  </div>
+  
+  <div class="card-footer bg-transparent">
+    <%= link_to "Ver detalhes", book_path(book), class: "btn btn-outline-primary btn-sm w-100" %>
+  </div>
+</div>

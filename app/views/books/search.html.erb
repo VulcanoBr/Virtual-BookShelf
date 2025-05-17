@@ -1,0 +1,120 @@
+<!-- app/views/books/search.html.erb -->
+<div class="container py-4">
+  <h1 class="mb-4">Buscar Livros</h1>
+  
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <%= form_with url: search_books_path, method: :get, class: "row g-3", data: { turbo_frame: "search_results" } do |f| %>
+        <div class="col-12 col-md-6">
+          <%= f.text_field :q, value: @query, class: "form-control form-control-lg", placeholder: "Digite o título, autor ou ISBN...", required: true %>
+        </div>
+        <div class="col-12 col-md-3">
+          <%= f.select :type, 
+              options_for_select([['Título', 'title'], ['Autor', 'author'], ['ISBN', 'isbn']], @type), 
+              {}, 
+              { class: "form-select form-select-lg" } 
+          %>
+        </div>
+        <div class="col-12 col-md-3">
+          <%= f.submit "Buscar", class: "btn btn-primary btn-lg w-100" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%= turbo_frame_tag "search_results" do %>
+    <% if @query.present? %>
+      <div class="mb-3">
+        <h2>Resultados para "<%= @query %>"</h2>
+        <p><%= pluralize(@search_results[:total_items], "livro encontrado", "livros encontrados") %></p>
+      </div>
+
+      <% if @search_results[:items].present? %>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+          <% @search_results[:items].each do |book| %>
+            <div class="col">
+              <div class="card h-100 shadow-sm">
+                <div class="row g-0">
+                  <div class="col-4">
+                    <% if book[:thumbnail].present? %>
+                      <img src="<%= book[:thumbnail] %>" alt="<%= book[:title] %>" class="img-fluid rounded-start h-100 object-fit-cover">
+                    <% else %>
+                      <div class="bg-light h-100 d-flex align-items-center justify-content-center rounded-start">
+                        <i class="bi bi-book fs-1 text-secondary"></i>
+                      </div>
+                    <% end %>
+                  </div>
+                  <div class="col-8">
+                    <div class="card-body">
+                      <h5 class="card-title text-truncate"><%= book[:title] %></h5>
+                      <% if book[:authors].present? %>
+                        <p class="card-text text-truncate"><small class="text-muted">por <%= book[:authors].join(", ") %></small></p>
+                      <% end %>
+                      <% if book[:published_date].present? %>
+                        <p class="card-text"><small class="text-muted"><%= book[:published_date].to_s[0..3] %></small></p>
+                      <% end %>
+                      <div class="d-grid gap-2">
+                        <%= link_to "Ver detalhes", preview_book_path(book[:id]), class: "btn btn-sm btn-outline-primary",
+                            data: { turbo_frame: "_top",
+
+                                    book_data: book.to_json } %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Paginação -->
+        <% if @search_results[:total_items] > 10 %>
+          <nav aria-label="Navegação de páginas">
+            <ul class="pagination justify-content-center">
+              <% if @page > 1 %>
+                <li class="page-item">
+                  <%= link_to "Anterior", search_books_path(q: @query, type: @type, page: @page - 1), class: "page-link" %>
+                </li>
+              <% else %>
+                <li class="page-item disabled">
+                  <span class="page-link">Anterior</span>
+                </li>
+              <% end %>
+              
+              <% total_pages = (@search_results[:total_items] / 10.0).ceil %>
+              <% total_pages = [total_pages, 100].min # Google Books API limita a 100 páginas %>
+              
+              <% [[@page - 2, 1].max, [@page + 2, total_pages].min].tap do |start_page, end_page| %>
+                <% (start_page..end_page).each do |page_num| %>
+                  <li class="page-item <%= 'active' if page_num == @page %>">
+                    <%= link_to page_num, search_books_path(q: @query, type: @type, page: page_num), class: "page-link" %>
+                  </li>
+                <% end %>
+              <% end %>
+              
+              <% if @page < total_pages %>
+                <li class="page-item">
+                  <%= link_to "Próximo", search_books_path(q: @query, type: @type, page: @page + 1), class: "page-link" %>
+                </li>
+              <% else %>
+                <li class="page-item disabled">
+                  <span class="page-link">Próximo</span>
+                </li>
+              <% end %>
+            </ul>
+          </nav>
+        <% end %>
+      <% else %>
+        <div class="alert alert-info">
+          Nenhum livro encontrado para a sua busca. Tente termos diferentes.
+        </div>
+      <% end %>
+    <% else %>
+      <div class="text-center py-5">
+        <i class="bi bi-search fs-1 text-secondary mb-3"></i>
+        <h3>Busque por livros</h3>
+        <p class="text-muted">Digite um título, autor ou ISBN na barra de busca acima</p>
+      </div>
+    <% end %>
+  <% end %>
+</div>

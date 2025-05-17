@@ -1,0 +1,32 @@
+
+<footer class="bg-dark text-light py-4 mt-auto">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <h5><i class="bi bi-book"></i> Virtual BookShelf</h5>
+        <p>Seu catálogo pessoal de livros online.</p>
+      </div>
+      <div class="col-md-3">
+        <h5>Links</h5>
+        <ul class="list-unstyled">
+          <li><%= link_to "Início", root_path, class: "text-light" %></li>
+          <li><%= link_to "Livros", books_path, class: "text-light" %></li>
+          <% if logged_in? %>
+            <li><%= link_to "Minhas Estantes", bookshelves_path, class: "text-light" %></li>
+          <% end %>
+        </ul>
+      </div>
+      <div class="col-md-3">
+        <h5>Contato</h5>
+        <ul class="list-unstyled">
+          <li><i class="bi bi-envelope"></i> contato@virtualbookshelf.com</li>
+          <li><i class="bi bi-telephone"></i> (11) 99999-9999</li>
+        </ul>
+      </div>
+    </div>
+    <hr>
+    <div class="text-center">
+      <p>&copy; <%= Date.current.year %> <i class="bi bi-book"></i> Virtual BookShelf. Todos os direitos reservados.</p>
+    </div>
+  </div>
+</footer>

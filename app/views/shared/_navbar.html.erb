@@ -1,0 +1,60 @@
+<!-- app/views/shared/_navbar.html.erb -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <%= link_to root_path, class: "navbar-brand" do %>
+      <i class="bi bi-book"></i> Virtual BookShelf
+    <% end %>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <%= link_to "Início", root_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "Livros", books_path, class: "nav-link" %>
+        </li>
+        <% if logged_in? %>
+          <li class="nav-item">
+            <%= link_to "Minhas Estantes", bookshelves_path, class: "nav-link" %>
+          </li>
+        <% end %>
+      </ul>
+      
+      <%= form_with url: search_books_path, method: :get, class: "d-flex me-3", data: { turbo: false } do |f| %>
+        <%= f.select :type, options_for_select([['Título', 'title'], ['Autor', 'author'], ['ISBN', 'isbn']], params[:type]), {}, class: "form-select me-2", style: "width: auto;" %>
+        <%= f.text_field :q, placeholder: "Buscar livros...", class: "form-control me-2", value: params[:q] %>
+        <%= f.submit "Buscar", class: "btn btn-outline-light" %>
+      <% end %>
+      
+      <ul class="navbar-nav">
+        <% if logged_in? %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+              <%= current_user.first_name %>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><%= link_to "Meu Perfil", user_path(current_user), class: "dropdown-item" %></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><%= button_to "Sair", logout_path, method: :delete, class: "dropdown-item" %></li>
+            </ul>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <%= link_to "Entrar", login_path, class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Cadastrar", signup_path, class: "nav-link" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+
+

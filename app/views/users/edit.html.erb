@@ -1,0 +1,58 @@
+<% content_for :title, "Editar Perfil" %>
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Editar Perfil</h4>
+      </div>
+      <div class="card-body">
+        <%= form_with model: @user, url: user_path(@user) do |f| %>
+          <% if @user.errors.any? %>
+            <div class="alert alert-danger">
+              <h5><%= pluralize(@user.errors.count, "erro") %> impediu a atualização:</h5>
+              <ul>
+                <% @user.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <%= f.label :first_name, "Nome", class: "form-label" %>
+              <%= f.text_field :first_name, class: "form-control", required: true %>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+              <%= f.label :last_name, "Sobrenome", class: "form-label" %>
+              <%= f.text_field :last_name, class: "form-control" %>
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <%= f.label :email, "E-mail", class: "form-label" %>
+            <%= f.email_field :email, class: "form-control", required: true %>
+          </div>
+          
+          <div class="mb-3">
+            <%= f.label :password, "Nova senha", class: "form-label" %>
+            <%= f.password_field :password, class: "form-control", minlength: 6 %>
+            <div class="form-text">Deixe em branco se não quiser alterar.</div>
+          </div>
+          
+          <div class="mb-3">
+            <%= f.label :password_confirmation, "Confirmar nova senha", class: "form-label" %>
+            <%= f.password_field :password_confirmation, class: "form-control" %>
+          </div>
+          
+          <div class="d-flex justify-content-between">
+            <%= link_to "Cancelar", user_path(@user), class: "btn btn-outline-secondary" %>
+            <%= f.submit "Atualizar perfil", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

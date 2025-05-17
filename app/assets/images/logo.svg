@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Estante de livros -->
+  <rect x="100" y="100" width="300" height="150" rx="5" fill="#f0f0f0" stroke="#333" stroke-width="3"/>
+  
+  <!-- Prateleiras -->
+  <line x1="100" y1="150" x2="400" y2="150" stroke="#333" stroke-width="3"/>
+  <line x1="100" y1="200" x2="400" y2="200" stroke="#333" stroke-width="3"/>
+  
+  <!-- Ícones de Livros Coloridos -->
+  <!-- Primeira prateleira -->
+  <g transform="translate(120,110)">
+    <path d="M0,0 h20 v30 h-20 z M20,0 v30" fill="#4a86e8" stroke="#333" stroke-width="1"/>
+  </g>
+  <g transform="translate(150,110)">
+    <path d="M0,0 h20 v30 h-20 z M20,0 v30" fill="#6aa84f" stroke="#333" stroke-width="1"/>
+  </g>
+  <g transform="translate(180,110)">
+    <path d="M0,0 h20 v30 h-20 z M20,0 v30" fill="#e06666" stroke="#333" stroke-width="1"/>
+  </g>
+  <g transform="translate(210,110)">
+    <path d="M0,0 h20 v30 h-20 z M20,0 v30" fill="#f1c232" stroke="#333" stroke-width="1"/>
+  </g>
+  <g transform="translate(240,110)">
+    <path d="M0,0 h20 v30 h-20 z M20,0 v30" fill="#674ea7" stroke="#333" stroke-width="1"/>
+  </g>
+
+  <!-- Segunda prateleira -->
+  <g transform="translate(120,160)">
+    <path d="M0,0 h20 v30 h-20 z M20,0 v30" fill="#674ea7" stroke="#333" stroke-width="1"/>
+  </g>
+  <g transform="translate(150,160)">
+    <path d="M0,0 h20 v30 h-20 z M20,0 v30" fill="#e06666" stroke="#333" stroke-width="1"/>
+  </g>
+  <g transform="translate(180,160)">
+    <path d="M0,0 h20 v30 h-20 z M20,0 v30" fill="#4a86e8" stroke="#333" stroke-width="1"/>
+  </g>
+  <g transform="translate(210,160)">
+    <path d="M0,0 h20 v30 h-20 z M20,0 v30" fill="#6aa84f" stroke="#333" stroke-width="1"/>
+  </g>
+  <g transform="translate(240,160)">
+    <path d="M0,0 h20 v30 h-20 z M20,0 v30" fill="#f1c232" stroke="#333" stroke-width="1"/>
+  </g>
+
+  <!-- Terceira prateleira -->
+  <g transform="translate(290,110)">
+    <path d="M0,0 h20 v30 h-20 z M20,0 v30" fill="#f1c232" stroke="#333" stroke-width="1"/>
+  </g>
+  <g transform="translate(320,110)">
+    <path d="M0,0 h20 v30 h-20 z M20,0 v30" fill="#674ea7" stroke="#333" stroke-width="1"/>
+  </g>
+  <g transform="translate(350,110)">
+    <path d="M0,0 h20 v30 h-20 z M20,0 v30" fill="#4a86e8" stroke="#333" stroke-width="1"/>
+  </g>
+
+  <!-- Quarta prateleira -->
+  <g transform="translate(290,160)">
+    <path d="M0,0 h20 v30 h-20 z M20,0 v30" fill="#e06666" stroke="#333" stroke-width="1"/>
+  </g>
+  <g transform="translate(320,160)">
+    <path d="M0,0 h20 v30 h-20 z M20,0 v30" fill="#6aa84f" stroke="#333" stroke-width="1"/>
+  </g>
+  <g transform="translate(350,160)">
+    <path d="M0,0 h20 v30 h-20 z M20,0 v30" fill="#f1c232" stroke="#333" stroke-width="1"/>
+  </g>
+  
+  <!-- Efeito Digital/Virtual -->
+  <path d="M120,210 L130,225 L350,225 L360,210" fill="#333" opacity="0.2"/>
+  <circle cx="250" cy="230" r="5" fill="#4a86e8" opacity="0.8">
+    <animate attributeName="opacity" values="0.8;0.2;0.8" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Texto "Virtual Bookshelf" -->
+  <text x="250" y="260" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#e74c3c">VIRTUAL BOOKSHELF</text>
+  
+  <!-- Ícone removido -->
+</svg>

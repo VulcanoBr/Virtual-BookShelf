@@ -1,0 +1,29 @@
+
+<%= form_with(model: bookshelf) do |form| %>
+  <% if bookshelf.errors.any? %>
+    <div class="alert alert-danger">
+      <h4><%= pluralize(bookshelf.errors.count, "erro", "erros") %> impediram que esta estante fosse salva:</h4>
+      <ul>
+        <% bookshelf.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :name, "Nome da Estante", class: "form-label" %>
+    <%= form.text_field :name, class: "form-control", placeholder: "Ex: Meus Favoritos, Para Ler, Ficção Científica, etc." %>
+    <div class="form-text">Escolha um nome descritivo para sua estante.</div>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :description, "Descrição (opcional)", class: "form-label" %>
+    <%= form.text_area :description, class: "form-control", rows: 3, placeholder: "Uma breve descrição para esta estante..." %>
+  </div>
+
+  <div class="d-flex gap-2">
+    <%= form.submit bookshelf.new_record? ? "Criar Estante" : "Atualizar Estante", class: "btn btn-primary" %>
+    <%= link_to "Cancelar", bookshelf.new_record? ? bookshelves_path : bookshelf_path(bookshelf), class: "btn btn-outline-secondary" %>
+  </div>
+<% end %>

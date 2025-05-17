@@ -1,0 +1,77 @@
+<div class="container py-1">
+  
+
+  <h1><%= @book.title %></h1>
+  <% if @book.subtitle.present? %>
+    <h2><%= @book.subtitle %></h2>
+  <% end %>
+
+  <div class="row">
+    <div class="col-md-4">
+      <% if @book.thumbnail_url.present? %>
+        <%= image_tag @book.thumbnail_url, alt: @book.title, class: "img-fluid rounded shadow-sm" %>
+      <% else %>
+        <div class="bg-light d-flex align-items-center justify-content-center rounded shadow-sm" style="height: 300px;">
+          <i class="bi bi-book-half fs-1 text-secondary"></i>
+        </div>
+      <% end %>
+    </div>
+    <div class="col-md-8">
+      <p><strong>Autores:</strong> <%= @book.authors %></p>
+      <p><strong>Idioma:</strong> <%= display_language(@book.language) %></p>
+      <p><strong>Categoria:</strong> <%= @book.categories %></p>
+      <p><strong>Editora:</strong> <%= @book.publisher %></p>
+      <p><strong>Data de Publicação:</strong> <%= @book.published_date %></p>
+      <p><strong>ISBN:</strong> <%= @book.isbn %></p>
+      <p><strong>Páginas:</strong> <%= @book.page_count %></p>
+      
+
+      <h5 class="mt-4">Descrição</h5>
+      <div>
+        <%= simple_format(@book.description) %>
+      </div>
+
+      <h5 class="mt-4">Minhas Estantes</h5>
+      <% if @bookshelf_item && @bookshelf_item[:item] %>
+        <%# O livro já está em uma estante %>
+        <p>
+          Este livro está na sua estante: <strong><%= @bookshelf_item[:bookshelf].name %></strong>
+          <% if @bookshelf_item[:item].status.present? %>
+            (Status: <%= @bookshelf_item[:item].status.humanize %>)
+          <% end %>
+        </p>
+        <%= button_to "Remover da Estante",
+                      book_bookshelf_item_path(@book, @bookshelf_item[:item]),
+                      method: :delete,
+                      class: "btn btn-danger btn-sm",
+                      data: { confirm: "Tem certeza que deseja remover este livro da estante '#{@bookshelf_item[:bookshelf].name}'?" } %>
+        <%# Aqui você também poderia ter um formulário para ATUALIZAR o status se quisesse %>
+
+      <% else %>
+        <%# Formulário para adicionar à estante %>
+        <% if current_user.bookshelves.any? %>
+          <div class="mt-3">
+            <h6>Adicionar à Estante:</h6>
+            <%= form_with(model: [@book, BookshelfItem.new], url: book_bookshelf_items_path(@book)) do |f| %>
+              <div class="mb-3">
+                <%= f.label :bookshelf_id, "Selecione a Estante:", class: "form-label" %>
+                <%= f.collection_select :bookshelf_id, current_user.bookshelves, :id, :name, { prompt: "Escolha uma estante" }, class: "form-select", required: true %>
+              </div>
+              <div class="mb-3">
+                <%= f.label :status, "Status (Opcional):", class: "form-label" %>
+                <%= f.select :status, options_for_select(BookshelfItem.validators_on(:status).first.options[:in].map { |s| [s.humanize, s] }, nil), { include_blank: 'Nenhum (padrão)' }, class: "form-select" %>
+              </div>
+              <%= f.submit "Adicionar à Estante", class: "btn btn-primary" %>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="mt-3">Você ainda não criou nenhuma estante. <%= link_to "Crie uma agora!", new_bookshelf_path %> para poder adicionar livros.</p>
+        <% end %>
+      <% end %>
+
+      <hr>
+      <%= link_to "Voltar para todos os livros", books_path, class: "btn btn-secondary mt-3" %>
+      <%= link_to "Voltar para a busca", search_books_path, class: "btn btn-outline-secondary mt-3" %>
+    </div>
+  </div>
+</div>

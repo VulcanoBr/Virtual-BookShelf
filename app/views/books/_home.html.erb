@@ -1,0 +1,112 @@
+<!-- app/views/home/index.html.erb -->
+<div class="bg-primary text-white py-5 mb-5">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-7">
+        <h1 class="display-4 fw-bold mb-4">Sua Estante Virtual</h1>
+        <p class="lead mb-4">Organize, descubra e acompanhe suas leituras em um só lugar. Encontre novos livros e mantenha um registro dos seus favoritos.</p>
+        
+        <div class="d-flex flex-wrap gap-2">
+          <%= link_to "Explorar livros", books_path, class: "btn btn-light btn-lg" %>
+          
+          <% if current_user %>
+            <%= link_to "Minhas estantes", bookshelves_path, class: "btn btn-outline-light btn-lg" %>
+          <% else %>
+            <%= link_to "Criar conta", signup_path, class: "btn btn-outline-light btn-lg" %>
+          <% end %>
+        </div>
+      </div>
+      <div class="col-md-5 d-none d-md-block">
+        <div class="text-center">
+          <svg width="300" height="300" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="opacity-75">
+            <path d="M4 19.5C4 18.837 4.26339 18.2011 4.73223 17.7322C5.20107 17.2634 5.83696 17 6.5 17H20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6.5 2H20V22H6.5C5.83696 22 5.20107 21.7366 4.73223 21.2678C4.26339 20.7989 4 20.163 4 19.5V4.5C4 3.83696 4.26339 3.20107 4.73223 2.73223C5.20107 2.26339 5.83696 2 6.5 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4 19.5C4 18.837 4.26339 18.2011 4.73223 17.7322C5.20107 17.2634 5.83696 17 6.5 17H20" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Barra de pesquisa destacada -->
+  <div class="card shadow-sm mb-5">
+    <div class="card-body p-4">
+      <h2 class="card-title mb-3">Encontre seu próximo livro</h2>
+      <%= render 'books/search_form', custom_class: "mb-0" %>
+    </div>
+  </div>
+
+  <!-- Livros recentes -->
+  <section class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Adicionados recentemente</h2>
+      <%= link_to "Ver todos", books_path, class: "btn btn-outline-primary" %>
+    </div>
+
+    <% recent_books = Book.order(created_at: :desc).limit(4) %>
+    
+    <% if recent_books.any? %>
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        <% recent_books.each do |book| %>
+          <div class="col">
+            <%= render 'books/book_card', book: book %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="alert alert-info">
+        Ainda não há livros disponíveis. <%= link_to "Comece a adicionar", search_books_path, class: "alert-link" %>.
+      </div>
+    <% end %>
+  </section>
+
+  <!-- Destaque para usuários logados -->
+  <% if current_user %>
+    <section class="mb-5">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Suas estantes</h2>
+        <%= link_to "Gerenciar estantes", bookshelves_path, class: "btn btn-outline-primary" %>
+      </div>
+
+      <% user_bookshelves = current_user.bookshelves.includes(:bookshelf_items).limit(3) %>
+      
+      <% if user_bookshelves.any? %>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+          <% user_bookshelves.each do |bookshelf| %>
+            <div class="col">
+              <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                  <h5 class="card-title"><%= bookshelf.name %></h5>
+                  <p class="card-text text-muted"><%= pluralize(bookshelf.bookshelf_items.count, "livro", "livros") %></p>
+                </div>
+                <div class="card-footer bg-transparent">
+                  <%= link_to "Ver estante", bookshelf_path(bookshelf), class: "btn btn-outline-primary btn-sm w-100" %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="alert alert-info">
+          Você ainda não criou nenhuma estante. <%= link_to "Criar sua primeira estante", new_bookshelf_path, class: "alert-link" %>.
+        </div>
+      <% end %>
+    </section>
+  <% else %>
+    <!-- CTA para usuários não logados -->
+    <section class="py-5">
+      <div class="card bg-light">
+        <div class="card-body p-5 text-center">
+          <h2 class="mb-3">Crie sua conta gratuita</h2>
+          <p class="lead mb-4">Organize suas leituras, crie estantes personalizadas e mantenha o controle do que você já leu e quer ler.</p>
+          <div class="d-flex justify-content-center gap-3">
+            <%= link_to "Cadastre-se", signup_path, class: "btn btn-primary btn-lg" %>
+            <%= link_to "Fazer login", login_path, class: "btn btn-outline-primary btn-lg" %>
+          </div>
+        </div>
+      </div>
+    </section>
+  <% end %>
+</div>

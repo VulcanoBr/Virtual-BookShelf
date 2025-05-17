@@ -1,0 +1,96 @@
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Minhas Estantes</h1>
+    <%= link_to new_bookshelf_path, class: "btn btn-primary" do %>
+      <i class="bi bi-plus-lg me-1"></i> Nova Estante
+    <% end %>
+  </div>
+
+  <% if @bookshelves.any? %>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <% @bookshelves.each do |bookshelf| %>
+        <div class="col">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title"><%= bookshelf.name %></h5>
+              <p class="card-text text-muted">
+                <%= pluralize(bookshelf.books.count, "livro", "livros") %>
+              </p>
+              
+              <div class="small mb-3">
+                <% if bookshelf.bookshelf_items.where(status: 'want_to_read').count > 0 %>
+                  <span class="badge bg-info me-1">
+                    <%= bookshelf.bookshelf_items.where(status: 'want_to_read').count %> quero ler
+                  </span>
+                <% end %>
+                
+                <% if bookshelf.bookshelf_items.where(status: 'reading').count > 0 %>
+                  <span class="badge bg-warning me-1">
+                    <%= bookshelf.bookshelf_items.where(status: 'reading').count %> lendo
+                  </span>
+                <% end %>
+                
+                <% if bookshelf.bookshelf_items.where(status: 'read').count > 0 %>
+                  <span class="badge bg-success">
+                    <%= bookshelf.bookshelf_items.where(status: 'read').count %> lidos
+                  </span>
+                <% end %>
+              </div>
+              
+              <% if bookshelf.books.count > 0 %>
+                <div class="small mb-3">
+                  <p class="text-muted">Livros recentes:</p>
+                  <ul class="ps-3">
+                    <% bookshelf.books.order(created_at: :desc).limit(3).each do |book| %>
+                      <li class="text-truncate"><%= book.title %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
+            </div>
+            
+            <div class="card-footer bg-transparent">
+              <div class="d-flex gap-2">
+                <%= link_to bookshelf_path(bookshelf), class: "btn btn-primary btn-sm flex-grow-1" do %>
+                  <i class="bi bi-eye me-1"></i> Ver estante
+                <% end %>
+                
+                <div class="dropdown">
+                  <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton<%= bookshelf.id %>" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-three-dots-vertical"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton<%= bookshelf.id %>">
+                    <li>
+                      <%= link_to edit_bookshelf_path(bookshelf), class: "dropdown-item" do %>
+                        <i class="bi bi-pencil me-1"></i> Editar
+                      <% end %>
+                    </li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                      <%= button_to bookshelf_path(bookshelf), method: :delete, class: "dropdown-item text-danger",
+                          data: { turbo_confirm: "Tem certeza que deseja excluir a estante \"#{bookshelf.name}\"? Isso removerá todos os livros dela." } do %>
+                        <i class="bi bi-trash me-1"></i> Excluir
+                      <% end %>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center py-5">
+      <i class="bi bi-bookshelf fs-1 text-secondary mb-3"></i>
+      <h3>Você ainda não criou nenhuma estante</h3>
+      <p class="text-muted mb-4">Crie estantes para organizar seus livros por categorias, status de leitura ou como preferir</p>
+      <%= link_to new_bookshelf_path, class: "btn btn-primary" do %>
+        <i class="bi bi-plus-lg me-1"></i> Criar minha primeira estante
+      <% end %>
+    </div>
+  <% end %>
+</div>

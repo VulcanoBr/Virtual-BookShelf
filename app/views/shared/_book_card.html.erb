@@ -1,0 +1,43 @@
+
+<div class="card h-100 shadow-sm">
+  <% if book.thumbnail_url.present? %>
+    <%= image_tag book.thumbnail_url, class: "card-img-top", alt: book.title, style: "height: 200px; object-fit: contain;" %>
+  <% else %>
+    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+      <i class="bi bi-book fs-1 text-secondary"></i>
+    </div>
+  <% end %>
+  
+  <div class="card-body">
+    <h5 class="card-title"><%= link_to book.title, book_path(book), class: "text-decoration-none" %></h5>
+    <% if book.authors.present? %>
+      <h6 class="card-subtitle mb-2 text-muted"><%= book.authors %></h6>
+    <% end %>
+    <% if book.published_date.present? %>
+      <p class="card-text"><small class="text-muted">Publicado em <%= book.published_date %></small></p>
+    <% end %>
+  </div>
+  
+  <div class="card-footer bg-white">
+    <%= link_to "Ver detalhes", book_path(book[:id]), class: "btn btn-sm btn-outline-primary" %>
+    
+    <% if logged_in? %>
+      <div class="dropdown d-inline-block">
+        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+          Adicionar à estante
+        </button>
+        <ul class="dropdown-menu">
+          <% current_user.bookshelves.each do |bookshelf| %>
+            <li>
+              <%= button_to add_book_bookshelf_path(bookshelf, book_id: book.id), 
+                            method: :post, 
+                            class: "dropdown-item" do %>
+                <%= bookshelf.name %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+</div>
